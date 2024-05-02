@@ -1,2 +1,51 @@
 schema: '2.0'
-stages: {}
+stages:
+  invalidate:
+    cmd: python stages/00_invalidate.py
+    deps:
+    - path: stages/00_invalidate.py
+      hash: md5
+      md5: 8c7276108b128a3a2b7082ae12ad5bb9
+      size: 811
+    outs:
+    - path: cache/00_invalidate
+      hash: md5
+      md5: 8996b7380cc65e7db93fb3a2f746ef8c.dir
+      size: 165
+      nfiles: 1
+  download:
+    cmd: stages/01_download.sh
+    deps:
+    - path: cache/00_invalidate
+      hash: md5
+      md5: 8996b7380cc65e7db93fb3a2f746ef8c.dir
+      size: 165
+      nfiles: 1
+    - path: stages/01_download.sh
+      hash: md5
+      md5: c7128c9173d6cacba7c41a443a80be48
+      size: 186
+    outs:
+    - path: cache/01_download
+      hash: md5
+      md5: 02429526fd9ee3ada0ff12698d7aaccc.dir
+      size: 178061
+      nfiles: 3
+  build:
+    cmd: python stages/03_build.py
+    deps:
+    - path: cache/01_download
+      hash: md5
+      md5: 02429526fd9ee3ada0ff12698d7aaccc.dir
+      size: 178061
+      nfiles: 3
+    - path: stages/03_build.py
+      hash: md5
+      md5: 0e86ff0291da7a91c2480139f117d099
+      size: 916
+    outs:
+    - path: brick
+      hash: md5
+      md5: 3729a8670a8d6845740f02854c1ca2f4.dir
+      size: 50706
+      nfiles: 1
